@@ -23,7 +23,7 @@ io.on('connection', function(socket){
     if(!user || !user.name){
       user = {name:new Date().getTime().toString(),room:"myroom"};
     }
-    console.log(name + " joined");
+    console.log(user.name + " joined");
 		socket.name = user.name;
 		socket.room = user.room;
 		socket.join(socket.room);
