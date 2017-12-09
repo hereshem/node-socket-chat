@@ -1,12 +1,17 @@
 {
-  "name": "Socket Chat",
+  "name": "SocketChat",
   "version": "0.0.1",
   "description": "My first socket.io app",
-  "dependencies": {
-    "express": "^4.15.2",
-    "socket.io": "^1.7.3"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hereshem/hereshem.github.io"
   },
+  "dependencies": {
+    "express": "4.14.0",
+    "socket.io": "1.7.3"
+  },
+  "main":"server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   }
 }
