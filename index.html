@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 70px; }
+      #typing { position: fixed; bottom: 30px; padding: 10px; color: chocolate;font-style: italic;}
+      .join{color: chocolate;font-style: italic;}
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <div id="typing"></div>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="socket.io-1.2.0.js"></script>
+    <script src="jquery-1.11.1.js"></script>
+    <script>
+    var name;
+      $(function () {
+        do{name = prompt("Enter your name");}while(!name);
+        initConn(name);
+      });
+      function initConn(name) {
+        var socket = io();
+        socket.emit('join', name);
+        $('form').submit(function(){
+          // socket.emit('message', $('#m').val());
+          // $('#m').val('');
+          return false;
+        });
+        $('#m').keyup(function (e) {
+          if (e.keyCode != 13) {
+              socket.emit('typing', $('#m').val());
+          }
+          else{
+            var msg = $("#m").val().replace("\n", "");
+            if (msg){
+              socket.emit('message', msg);
+              $('#m').val('');
+              $('#typing').html("");
+            }
+          }
+        });
+        socket.on('message', function(msg){
+          $('#messages').append($('<li>').html("<strong>"+msg.name+" : </strong>"+msg.message));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+        socket.on('join', function(name){
+          $('#messages').append($('<li class="join">').html("<strong>"+name+" : </strong> joined "));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+        var timeout;
+        socket.on('typing', function(msg){
+          $('#typing').html("<strong>"+msg.name+" is typing : </strong> "+msg.message);
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {$('#typing').html("");}, 1000);
+        });
+        $('#m').focus();
+      };
+    </script>
+  </body>
+</html>
