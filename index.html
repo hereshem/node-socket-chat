@@ -32,7 +32,7 @@
       });
       function initConn(name) {
         var socket = io();
-        socket.emit('join', name);
+        socket.emit('join', {name:name,room:"myroom"});
         $('form').submit(function(){
           // socket.emit('message', $('#m').val());
           // $('#m').val('');

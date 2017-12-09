@@ -19,15 +19,19 @@ app.get('/socket.io-1.2.0.js', function(req, res){
 
 io.on('connection', function(socket){
 	var id = socket.id;
-	socket.on('join', function(name){
+	socket.on('join', function(user){
+    if(!user || !user.name){
+      user = {name:new Date().getTime().toString(),room:"myroom"};
+    }
     console.log(name + " joined");
-		socket.name = name;
-		socket.room = "myroom";
+		socket.name = user.name;
+		socket.room = user.room;
 		socket.join(socket.room);
     io.in(socket.room).emit('join', name);
     for (var i = 0; i < messages.length; i++) {
       socket.emit('message', messages[i]);
     }
+    io.in(socket.room).emit('join', name);
 	});
 	
   socket.on('message', function(msg){
