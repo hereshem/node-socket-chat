@@ -27,11 +27,10 @@ io.on('connection', function(socket){
 		socket.name = user.name;
 		socket.room = user.room;
 		socket.join(socket.room);
-    io.in(socket.room).emit('join', name);
     for (var i = 0; i < messages.length; i++) {
       socket.emit('message', messages[i]);
     }
-    io.in(socket.room).emit('join', name);
+    io.in(socket.room).emit('join', user.name);
 	});
 	
   socket.on('message', function(msg){
