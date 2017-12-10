@@ -30,7 +30,7 @@
         var name = prompt("Enter your name");
         //var room = prompt("Room you want to join")
         socket = io();
-        socket.emit('join', name); // ('join', name, room); for joining into the room
+        socket.emit('join', name, "myroom"); // ('join', name, room); for joining into the room
         // socket.emit('users'); // for getting users list
         // socket.on('users', function(users){console.log(users)});
         socket.on('me', function(data){me=data;})
