@@ -25,11 +25,11 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="jquery-1.11.1.js"></script>
     <script>
-      var me, s;
+      var me, socket;
       $(function () {
         var name = prompt("Enter your name");
         //var room = prompt("Room you want to join")
-        var socket = s = io();
+        socket = io();
         socket.emit('join', name, "room");
         socket.on('me', function(data){me=data;})
         $('form').submit(function(){
@@ -60,6 +60,9 @@
           timeout = setTimeout(function() {$('#typing').html("");}, 1000);
         });
         $('#m').focus();
+      });
+      $( window ).unload(function() {
+          socket.emit('part');
       });
     </script>
   </body>
