@@ -22,33 +22,27 @@
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
-    <script src="socket.io-1.2.0.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="jquery-1.11.1.js"></script>
     <script>
-    var name;
+      var me, s;
       $(function () {
-        do{name = prompt("Enter your name");}while(!name);
-        initConn(name);
-      });
-      function initConn(name) {
-        var socket = io();
-        socket.emit('join', {name:name,room:"myroom"});
+        var name = prompt("Enter your name");
+        //var room = prompt("Room you want to join")
+        var socket = s = io();
+        socket.emit('join', name, "room");
+        socket.on('me', function(data){me=data;})
         $('form').submit(function(){
-          // socket.emit('message', $('#m').val());
-          // $('#m').val('');
-          return false;
+            if( $('#m').val()) {
+                socket.emit('message', $('#m').val());
+                $('#m').val('');
+                $('#typing').html('');
+            }
+            return false;
         });
         $('#m').keyup(function (e) {
           if (e.keyCode != 13) {
               socket.emit('typing', $('#m').val());
-          }
-          else{
-            var msg = $("#m").val().replace("\n", "");
-            if (msg){
-              socket.emit('message', msg);
-              $('#m').val('');
-              $('#typing').html("");
-            }
           }
         });
         socket.on('message', function(msg){
@@ -56,7 +50,7 @@
           window.scrollTo(0, document.body.scrollHeight);
         });
         socket.on('join', function(name){
-          $('#messages').append($('<li class="join">').html("<strong>"+name+" : </strong> joined "));
+          $('#messages').append($('<li class="join">').html("<strong>"+name+" : </strong> joined"));
           window.scrollTo(0, document.body.scrollHeight);
         });
         var timeout;
@@ -66,7 +60,7 @@
           timeout = setTimeout(function() {$('#typing').html("");}, 1000);
         });
         $('#m').focus();
-      };
+      });
     </script>
   </body>
 </html>
