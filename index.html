@@ -30,11 +30,13 @@
         var name = prompt("Enter your name");
         //var room = prompt("Room you want to join")
         socket = io();
-        socket.emit('join', name, "room");
+        socket.emit('join', name); // ('join', name, room); for joining into the room
+        // socket.emit('users'); // for getting users list
+        // socket.on('users', function(users){console.log(users)});
         socket.on('me', function(data){me=data;})
         $('form').submit(function(){
             if( $('#m').val()) {
-                socket.emit('message', $('#m').val());
+                socket.emit('message', $('#m').val()); // ('message', msg, to_room, to_id); for sending to rooms and personal id
                 $('#m').val('');
                 $('#typing').html('');
             }
