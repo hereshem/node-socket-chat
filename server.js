@@ -36,7 +36,7 @@ io.on('connection', function(socket){
 	
     socket.on('message', function(msg, to_room, to_id){
         if(msg){
-            var message = {name:socket.name,to_room:to_room,to_id:to_id,message:msg,timestamp:new Date().getTime()};
+            var message = {user_id:socket.id,name:socket.name,to_room:to_room,to_id:to_id,message:msg,timestamp:new Date().getTime()};
             console.log("<" + message.name + "> " + msg);
             messages.push(message);
             if(messages.length > 10){
@@ -54,8 +54,8 @@ io.on('connection', function(socket){
         }
     });
     socket.on('typing', function(msg){
-        var message = {name:socket.name,message:msg,timestamp:new Date().getTime()};
-        io.in(socket.room).emit('typing', message);
+        var message = {user_id:socket.id,name:socket.name,message:msg,timestamp:new Date().getTime()};
+        io.emit('typing', message);
     });
     socket.on('users', function(){
         socket.emit('users', users);
