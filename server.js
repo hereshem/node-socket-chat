@@ -13,6 +13,9 @@ app.get('/', function(req, res){
 app.get('/jquery-1.11.1.js', function(req, res){
     res.sendFile(__dirname + '/jquery-1.11.1.js');
 });
+app.get('/socket.io.js', function(req, res){
+    res.sendFile(__dirname + '/socket.io.js');
+});
 
 io.on('connection', function(socket){
     socket.on('join', function(name, room){
