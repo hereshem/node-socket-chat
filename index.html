@@ -53,7 +53,7 @@
           }
         });
         socket.on('message', function(msg){
-          $('#messages').append($('<li>').html("<strong title='"+timeFormat(msg.timestamp)+"' onclick='getName()'>"+msg.name + (msg.name==name?" (you)":"")+" : </strong>"+msg.message));
+          $('#messages').append($('<li>').html("<strong title='"+timeFormat(msg.timestamp)+"' onclick='getName()'>"+msg.name + (msg.name==name?" (you)":"")+" : </strong>"+toStaticHTML(msg.message)));
           window.scrollTo(0, document.body.scrollHeight);
         });
         socket.on('join', function(name){
@@ -62,7 +62,7 @@
         });
         var timeout;
         socket.on('typing', function(msg){
-          $('#typing').html("<strong>"+msg.name+" is typing : </strong> "+msg.message);
+          $('#typing').html("<strong>"+msg.name+" is typing : </strong> "+toStaticHTML(msg.message));
           clearTimeout(timeout);
           timeout = setTimeout(function() {$('#typing').html("");}, 1000);
         });
@@ -121,6 +121,12 @@
         else{
           alert("Name must be more than 3 characters")
         }
+      }
+      function toStaticHTML(inputHtml) {
+        inputHtml = inputHtml.toString();
+        return inputHtml.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
       }
 
     </script>
